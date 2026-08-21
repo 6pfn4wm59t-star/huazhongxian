@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>画中仙 · 未寄的红豆笺</title>
+    <title>画中仙 · 未寄的红豆笺 · 有凶手版</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: 'Segoe UI', '华文楷体', 'KaiTi', cursive, sans-serif;
             background: #0b0a0c;
@@ -19,99 +23,558 @@
         .game-container {
             max-width: 960px;
             width: 100%;
-            background: rgba(20,15,18,0.92);
+            background: rgba(20, 15, 18, 0.92);
             backdrop-filter: blur(4px);
             border: 1px solid #7a5a4a;
             border-radius: 40px 40px 28px 28px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 0 1px #4a3530 inset;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px #4a3530 inset;
             padding: 24px 22px 32px;
             color: #f0e3d4;
         }
-        h1 { font-size: 1.6rem; font-weight: 300; letter-spacing: 4px; text-align: center; color: #f7d9c0; text-shadow: 0 0 12px #b3866a, 0 2px 0 #3f2820; margin-bottom: 2px; }
-        .subhead { text-align: center; font-size: 0.8rem; color: #b6967e; border-top: 1px solid #4d3630; border-bottom: 1px solid #4d3630; padding: 6px 0; margin-bottom: 14px; letter-spacing: 2px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
-        .flex-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 6px 0; }
-        .btn { background: #2a1d1a; border: 1px solid #6b4e40; color: #f0e0d0; padding: 7px 18px; border-radius: 60px; font-size: 0.85rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 0 #0f0908; font-family: inherit; letter-spacing: 1px; flex: 0 1 auto; }
-        .btn:hover { background: #3f2a24; border-color: #a67a62; transform: translateY(-2px); box-shadow: 0 6px 0 #0f0908; }
-        .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #0f0908; }
-        .btn-primary { background: #6d3f30; border-color: #b28264; color: #ffeede; }
-        .btn-gold { background: #7a5a3a; border-color: #c9a77b; color: #fff4e0; }
-        .btn-sm { padding: 4px 12px; font-size: 0.7rem; }
-        .btn-green { background: #2a4a3a; border-color: #5a8a6a; color: #b0e0c0; }
-        .btn-red { background: #4a2a2a; border-color: #7a4a4a; color: #f0c0c0; }
-        .btn-blue { background: #2a3a4a; border-color: #5a6a8a; color: #b0c0e0; }
-        .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-        .card { background: #171013; border: 1px solid #3f2e26; border-radius: 24px; padding: 14px 16px; margin: 10px 0; box-shadow: inset 0 0 20px #0a0608, 0 8px 16px rgba(0,0,0,0.5); }
-        .card-title { font-size: 0.8rem; color: #b6967e; letter-spacing: 2px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-        .character-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin: 10px 0; }
-        .char-card { background: #1f1618; border: 2px solid #3d2e26; border-radius: 16px; padding: 12px 8px; text-align: center; cursor: pointer; transition: 0.15s; position: relative; }
-        .char-card:hover { border-color: #7a5a4a; background: #2a1c1a; transform: translateY(-2px); }
-        .char-card.selected { border-color: #dbb48c; background: #2f1e1a; box-shadow: 0 0 20px #b2826440; }
-        .char-card .avatar { font-size: 2.2rem; margin-bottom: 4px; display: block; }
-        .char-card .name { font-weight: 600; color: #f0d5c0; font-size: 0.95rem; display: block; }
-        .char-card .sub { font-size: 0.65rem; color: #b6967e; display: block; margin-top: 2px; }
-        .char-card .badge { position: absolute; top: -8px; right: -8px; border-radius: 40px; padding: 2px 10px; font-size: 0.5rem; color: #fff; border: 1px solid #c9a77b; }
-        .badge-me { background: #6d3f30; }
-        .badge-friend { background: #2a5a3a; }
-        .badge-npc { background: #3a3a4a; }
-        .badge-unlocked { background: #2a7a3a; }
-        .log-area { background: #0e0a0c; border: 1px solid #3a2a24; border-radius: 16px; padding: 10px 12px; max-height: 180px; overflow-y: auto; font-size: 0.8rem; line-height: 1.5; color: #dacfc0; font-family: 'Courier New', monospace; margin: 6px 0; }
-        .log-area .log-entry { border-bottom: 1px solid #2a1e1a; padding: 3px 0; }
-        .log-area .log-entry:last-child { border: none; }
-        .log-entry.npc { color: #a0c0d0; border-left: 3px solid #4a7a8a; padding-left: 8px; }
-        .log-entry.player { color: #f0d5c0; border-left: 3px solid #b28264; padding-left: 8px; }
-        .log-entry.system { color: #b6967e; font-style: italic; }
-        .keyword-tag { display: inline-block; background: #2d1e1a; border: 1px solid #6b4e40; border-radius: 40px; padding: 4px 14px; margin: 3px 5px 3px 0; font-size: 0.75rem; cursor: pointer; transition: 0.15s; user-select: none; }
-        .keyword-tag:hover { border-color: #a67a62; background: #3a2520; }
-        .keyword-tag.active { background: #6d3f30; border-color: #c9a77b; color: #fff; box-shadow: 0 0 12px #b2826440; }
-        .keyword-tag.used { opacity: 0.3; pointer-events: none; cursor: not-allowed; }
-        .relationship-svg { width: 100%; aspect-ratio: 16/9; background: #0e0a0c; border-radius: 20px; border: 1px solid #3a2a24; margin: 6px 0; }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; }
-        .text-muted { color: #a08474; font-size: 0.75rem; }
-        .hidden { display: none !important; }
-        .fade-in { animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
-        .secret-panel { background: #0d080a; border: 1px solid #5a3f30; border-radius: 18px; padding: 14px 16px; margin: 6px 0; border-left: 4px solid #b28264; }
-        .secret-panel .label { color: #b6967e; font-size: 0.65rem; letter-spacing: 2px; margin-bottom: 4px; }
-        .secret-panel .content { color: #f7d9c0; font-size: 0.88rem; line-height: 1.8; white-space: pre-wrap; }
-        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); display: flex; justify-content: center; align-items: center; z-index: 999; padding: 20px; }
-        .modal-box { max-width: 640px; width: 100%; background: #1f1618; border: 1px solid #7a5a4a; border-radius: 36px; padding: 28px 28px; box-shadow: 0 20px 40px #000; max-height: 85vh; overflow-y: auto; }
-        .modal-box h3 { font-weight: 300; letter-spacing: 3px; color: #f7d9c0; margin-bottom: 10px; font-size: 1.1rem; }
-        .evidence-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; margin: 10px 0; }
-        .evidence-item { background: #0d080a; border: 2px solid #3a2a24; border-radius: 14px; padding: 12px 14px; cursor: pointer; transition: 0.3s; position: relative; }
-        .evidence-item:hover { border-color: #5a4a3a; }
-        .evidence-item.locked { opacity: 0.5; filter: blur(1px); }
-        .evidence-item.locked .ev-content { color: #4a4a4a; }
-        .evidence-item.unlocked { opacity: 1; filter: blur(0); border-color: #5a8a5a; }
-        .evidence-item .ev-icon { font-size: 1.5rem; display: block; margin-bottom: 4px; }
-        .evidence-item .ev-name { color: #b6967e; font-size: 0.7rem; font-weight: 600; }
-        .evidence-item .ev-content { color: #dacfc0; font-size: 0.82rem; margin-top: 4px; line-height: 1.5; white-space: pre-wrap; }
-        .evidence-item .ev-lock { position: absolute; top: 8px; right: 10px; font-size: 0.7rem; color: #5a4a3a; }
-        .evidence-item.unlocked .ev-lock { color: #5a8a5a; }
-        .search-hint { color: #5a7a5a; font-size: 0.7rem; text-align: center; padding: 6px; }
-        .phase-tip { background: #1a1a2a; border: 1px solid #4a4a6a; border-radius: 16px; padding: 12px 16px; margin: 8px 0; color: #c0c0e0; font-size: 0.85rem; line-height: 1.6; }
-        .phase-tip strong { color: #f7d9c0; }
-        .phase-badge { display: inline-block; padding: 2px 16px; border-radius: 40px; font-size: 0.7rem; background: #3a2a2a; border: 1px solid #6a4a4a; color: #e0c0c0; }
-        .phase-badge.vote { background: #3a2a2a; border-color: #8a4a4a; color: #f0a0a0; }
-        .phase-badge.truth { background: #2a4a3a; border-color: #5a8a6a; color: #b0e0b0; }
-        .npc-speech { background: #0d1a1a; border: 1px solid #3a5a5a; border-radius: 16px; padding: 12px 16px; margin: 8px 0; color: #a0d0d0; font-size: 0.85rem; line-height: 1.6; border-left: 4px solid #4a8a8a; }
-        .npc-speech .speaker { color: #7ac0c0; font-weight: 600; }
-        .friend-tag { display: inline-block; background: #2a5a3a; border: 1px solid #5a8a6a; border-radius: 40px; padding: 2px 12px; font-size: 0.6rem; color: #b0e0c0; margin-left: 4px; }
-        .me-tag { display: inline-block; background: #6d3f30; border: 1px solid #b28264; border-radius: 40px; padding: 2px 12px; font-size: 0.6rem; color: #ffeede; margin-left: 4px; }
-        .npc-tag { display: inline-block; background: #3a3a4a; border: 1px solid #5a5a6a; border-radius: 40px; padding: 2px 12px; font-size: 0.6rem; color: #b0b0c0; margin-left: 4px; }
-        .story-divider { border: none; border-top: 1px solid #3a2a2a; margin: 8px 0; }
-        .full-story-badge { display: inline-block; background: #2a5a3a; border: 1px solid #5aaa6a; border-radius: 40px; padding: 2px 14px; font-size: 0.6rem; color: #a0e0a0; margin-left: 8px; }
-        .vote-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin: 10px 0; }
-        .vote-card { background: #1f1618; border: 2px solid #3d2e26; border-radius: 14px; padding: 12px 8px; text-align: center; cursor: pointer; transition: 0.2s; }
-        .vote-card:hover { border-color: #7a5a4a; background: #2a1c1a; }
-        .vote-card.selected { border-color: #dbb48c; background: #2f1e1a; box-shadow: 0 0 20px #b2826440; }
-        .vote-card .v-avatar { font-size: 2rem; display: block; }
-        .vote-card .v-name { font-weight: 600; color: #f0d5c0; font-size: 0.9rem; display: block; margin-top: 2px; }
-        .vote-card .v-title { font-size: 0.6rem; color: #b6967e; display: block; }
-        .truth-section { background: #0a1a0a; border: 2px solid #3a6a3a; border-radius: 20px; padding: 20px; margin: 12px 0; }
-        .truth-section .truth-title { color: #5aaa5a; font-size: 1rem; font-weight: 600; letter-spacing: 2px; margin-bottom: 8px; }
-        .truth-section .truth-body { color: #d0e0d0; line-height: 1.8; font-size: 0.92rem; white-space: pre-wrap; }
-        .reveal-btn { background: #3a5a3a; border-color: #5a8a5a; color: #d0f0d0; font-size: 1rem; padding: 10px 30px; }
-        .reveal-btn:hover { background: #4a6a4a; border-color: #7aaa7a; }
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-align: center;
+            color: #f7d9c0;
+            text-shadow: 0 0 12px #b3866a, 0 2px 0 #3f2820;
+            margin-bottom: 2px;
+        }
+        .subhead {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #b6967e;
+            border-top: 1px solid #4d3630;
+            border-bottom: 1px solid #4d3630;
+            padding: 6px 0;
+            margin-bottom: 14px;
+            letter-spacing: 2px;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 6px 0;
+        }
+        .btn {
+            background: #2a1d1a;
+            border: 1px solid #6b4e40;
+            color: #f0e0d0;
+            padding: 7px 18px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 0 #0f0908;
+            font-family: inherit;
+            letter-spacing: 1px;
+            flex: 0 1 auto;
+        }
+        .btn:hover {
+            background: #3f2a24;
+            border-color: #a67a62;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #0f0908;
+        }
+        .btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #0f0908;
+        }
+        .btn-primary {
+            background: #6d3f30;
+            border-color: #b28264;
+            color: #ffeede;
+        }
+        .btn-gold {
+            background: #7a5a3a;
+            border-color: #c9a77b;
+            color: #fff4e0;
+        }
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 0.7rem;
+        }
+        .btn-green {
+            background: #2a4a3a;
+            border-color: #5a8a6a;
+            color: #b0e0c0;
+        }
+        .btn-red {
+            background: #4a2a2a;
+            border-color: #7a4a4a;
+            color: #f0c0c0;
+        }
+        .btn-blue {
+            background: #2a3a4a;
+            border-color: #5a6a8a;
+            color: #b0c0e0;
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .card {
+            background: #171013;
+            border: 1px solid #3f2e26;
+            border-radius: 24px;
+            padding: 14px 16px;
+            margin: 10px 0;
+            box-shadow: inset 0 0 20px #0a0608, 0 8px 16px rgba(0, 0, 0, 0.5);
+        }
+        .card-title {
+            font-size: 0.8rem;
+            color: #b6967e;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .char-card {
+            background: #1f1618;
+            border: 2px solid #3d2e26;
+            border-radius: 16px;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.15s;
+            position: relative;
+        }
+        .char-card:hover {
+            border-color: #7a5a4a;
+            background: #2a1c1a;
+            transform: translateY(-2px);
+        }
+        .char-card.selected {
+            border-color: #dbb48c;
+            background: #2f1e1a;
+            box-shadow: 0 0 20px #b2826440;
+        }
+        .char-card .avatar {
+            font-size: 2.2rem;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .char-card .name {
+            font-weight: 600;
+            color: #f0d5c0;
+            font-size: 0.95rem;
+            display: block;
+        }
+        .char-card .sub {
+            font-size: 0.65rem;
+            color: #b6967e;
+            display: block;
+            margin-top: 2px;
+        }
+        .char-card .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            border-radius: 40px;
+            padding: 2px 10px;
+            font-size: 0.5rem;
+            color: #fff;
+            border: 1px solid #c9a77b;
+        }
+        .badge-me {
+            background: #6d3f30;
+        }
+        .badge-friend {
+            background: #2a5a3a;
+        }
+        .badge-npc {
+            background: #3a3a4a;
+        }
+        .badge-unlocked {
+            background: #2a7a3a;
+        }
+        .log-area {
+            background: #0e0a0c;
+            border: 1px solid #3a2a24;
+            border-radius: 16px;
+            padding: 10px 12px;
+            max-height: 180px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: #dacfc0;
+            font-family: 'Courier New', monospace;
+            margin: 6px 0;
+        }
+        .log-area .log-entry {
+            border-bottom: 1px solid #2a1e1a;
+            padding: 3px 0;
+        }
+        .log-area .log-entry:last-child {
+            border: none;
+        }
+        .log-entry.npc {
+            color: #a0c0d0;
+            border-left: 3px solid #4a7a8a;
+            padding-left: 8px;
+        }
+        .log-entry.player {
+            color: #f0d5c0;
+            border-left: 3px solid #b28264;
+            padding-left: 8px;
+        }
+        .log-entry.system {
+            color: #b6967e;
+            font-style: italic;
+        }
+        .keyword-tag {
+            display: inline-block;
+            background: #2d1e1a;
+            border: 1px solid #6b4e40;
+            border-radius: 40px;
+            padding: 4px 14px;
+            margin: 3px 5px 3px 0;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.15s;
+            user-select: none;
+        }
+        .keyword-tag:hover {
+            border-color: #a67a62;
+            background: #3a2520;
+        }
+        .keyword-tag.active {
+            background: #6d3f30;
+            border-color: #c9a77b;
+            color: #fff;
+            box-shadow: 0 0 12px #b2826440;
+        }
+        .keyword-tag.used {
+            opacity: 0.3;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+        .relationship-svg {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #0e0a0c;
+            border-radius: 20px;
+            border: 1px solid #3a2a24;
+            margin: 6px 0;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .text-muted {
+            color: #a08474;
+            font-size: 0.75rem;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .secret-panel {
+            background: #0d080a;
+            border: 1px solid #5a3f30;
+            border-radius: 18px;
+            padding: 14px 16px;
+            margin: 6px 0;
+            border-left: 4px solid #b28264;
+        }
+        .secret-panel .label {
+            color: #b6967e;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+        .secret-panel .content {
+            color: #f7d9c0;
+            font-size: 0.88rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(6px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            padding: 20px;
+        }
+        .modal-box {
+            max-width: 640px;
+            width: 100%;
+            background: #1f1618;
+            border: 1px solid #7a5a4a;
+            border-radius: 36px;
+            padding: 28px 28px;
+            box-shadow: 0 20px 40px #000;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .modal-box h3 {
+            font-weight: 300;
+            letter-spacing: 3px;
+            color: #f7d9c0;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .evidence-item {
+            background: #0d080a;
+            border: 2px solid #3a2a24;
+            border-radius: 14px;
+            padding: 12px 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+        .evidence-item:hover {
+            border-color: #5a4a3a;
+        }
+        .evidence-item.locked {
+            opacity: 0.5;
+            filter: blur(1px);
+        }
+        .evidence-item.locked .ev-content {
+            color: #4a4a4a;
+        }
+        .evidence-item.unlocked {
+            opacity: 1;
+            filter: blur(0);
+            border-color: #5a8a5a;
+        }
+        .evidence-item .ev-icon {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .evidence-item .ev-name {
+            color: #b6967e;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .evidence-item .ev-content {
+            color: #dacfc0;
+            font-size: 0.82rem;
+            margin-top: 4px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+        .evidence-item .ev-lock {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            font-size: 0.7rem;
+            color: #5a4a3a;
+        }
+        .evidence-item.unlocked .ev-lock {
+            color: #5a8a5a;
+        }
+        .search-hint {
+            color: #5a7a5a;
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 6px;
+        }
+        .phase-tip {
+            background: #1a1a2a;
+            border: 1px solid #4a4a6a;
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin: 8px 0;
+            color: #c0c0e0;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        .phase-tip strong {
+            color: #f7d9c0;
+        }
+        .phase-badge {
+            display: inline-block;
+            padding: 2px 16px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            background: #3a2a2a;
+            border: 1px solid #6a4a4a;
+            color: #e0c0c0;
+        }
+        .phase-badge.vote {
+            background: #3a2a2a;
+            border-color: #8a4a4a;
+            color: #f0a0a0;
+        }
+        .phase-badge.truth {
+            background: #2a4a3a;
+            border-color: #5a8a6a;
+            color: #b0e0b0;
+        }
+        .npc-speech {
+            background: #0d1a1a;
+            border: 1px solid #3a5a5a;
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin: 8px 0;
+            color: #a0d0d0;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            border-left: 4px solid #4a8a8a;
+        }
+        .npc-speech .speaker {
+            color: #7ac0c0;
+            font-weight: 600;
+        }
+        .friend-tag {
+            display: inline-block;
+            background: #2a5a3a;
+            border: 1px solid #5a8a6a;
+            border-radius: 40px;
+            padding: 2px 12px;
+            font-size: 0.6rem;
+            color: #b0e0c0;
+            margin-left: 4px;
+        }
+        .me-tag {
+            display: inline-block;
+            background: #6d3f30;
+            border: 1px solid #b28264;
+            border-radius: 40px;
+            padding: 2px 12px;
+            font-size: 0.6rem;
+            color: #ffeede;
+            margin-left: 4px;
+        }
+        .npc-tag {
+            display: inline-block;
+            background: #3a3a4a;
+            border: 1px solid #5a5a6a;
+            border-radius: 40px;
+            padding: 2px 12px;
+            font-size: 0.6rem;
+            color: #b0b0c0;
+            margin-left: 4px;
+        }
+        .story-divider {
+            border: none;
+            border-top: 1px solid #3a2a2a;
+            margin: 8px 0;
+        }
+        .full-story-badge {
+            display: inline-block;
+            background: #2a5a3a;
+            border: 1px solid #5aaa6a;
+            border-radius: 40px;
+            padding: 2px 14px;
+            font-size: 0.6rem;
+            color: #a0e0a0;
+            margin-left: 8px;
+        }
+        .vote-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .vote-card {
+            background: #1f1618;
+            border: 2px solid #3d2e26;
+            border-radius: 14px;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .vote-card:hover {
+            border-color: #7a5a4a;
+            background: #2a1c1a;
+        }
+        .vote-card.selected {
+            border-color: #dbb48c;
+            background: #2f1e1a;
+            box-shadow: 0 0 20px #b2826440;
+        }
+        .vote-card .v-avatar {
+            font-size: 2rem;
+            display: block;
+        }
+        .vote-card .v-name {
+            font-weight: 600;
+            color: #f0d5c0;
+            font-size: 0.9rem;
+            display: block;
+            margin-top: 2px;
+        }
+        .vote-card .v-title {
+            font-size: 0.6rem;
+            color: #b6967e;
+            display: block;
+        }
+        .truth-section {
+            background: #0a1a0a;
+            border: 2px solid #3a6a3a;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 12px 0;
+        }
+        .truth-section .truth-title {
+            color: #5aaa5a;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .truth-section .truth-body {
+            color: #d0e0d0;
+            line-height: 1.8;
+            font-size: 0.92rem;
+            white-space: pre-wrap;
+        }
+        .reveal-btn {
+            background: #3a5a3a;
+            border-color: #5a8a5a;
+            color: #d0f0d0;
+            font-size: 1rem;
+            padding: 10px 30px;
+        }
+        .reveal-btn:hover {
+            background: #4a6a4a;
+            border-color: #7aaa7a;
+        }
     </style>
 </head>
 <body>
@@ -130,12 +593,45 @@
             <span style="font-size:0.7rem; color:#b6967e;" id="playerNameDisplay">👤 未选角色</span>
         </div>
 
+        <!-- 选角 -->
         <div id="stepSelect" class="card">
             <div class="flex-between">
                 <span style="font-weight:300; letter-spacing:2px; font-size:0.95rem;">🎴 选择你的角色</span>
                 <span class="text-muted">点击头像选择</span>
             </div>
-            <div id="characterGrid" class="character-grid"></div>
+            <!-- 角色卡片直接写在HTML里 -->
+            <div id="characterGrid" class="character-grid">
+                <div class="char-card" data-id="shen">
+                    <span class="avatar">🎨</span>
+                    <span class="name">沈清墨</span>
+                    <span class="sub">大弟子·私生女</span>
+                    <span class="badge badge-npc">NPC</span>
+                </div>
+                <div class="char-card" data-id="bai">
+                    <span class="avatar">🌙</span>
+                    <span class="name">白素衣</span>
+                    <span class="sub">御用模特·无影人</span>
+                    <span class="badge badge-npc">NPC</span>
+                </div>
+                <div class="char-card" data-id="lu">
+                    <span class="avatar">📜</span>
+                    <span class="name">陆青崖 ⚠️</span>
+                    <span class="sub">画商·赠笔者</span>
+                    <span class="badge badge-npc">NPC</span>
+                </div>
+                <div class="char-card" data-id="xue">
+                    <span class="avatar">🎵</span>
+                    <span class="name">薛泠音</span>
+                    <span class="sub">琴师·被背叛者</span>
+                    <span class="badge badge-npc">NPC</span>
+                </div>
+                <div class="char-card" data-id="jiang">
+                    <span class="avatar">❄️</span>
+                    <span class="name">江雪吟</span>
+                    <span class="sub">书童·画中人</span>
+                    <span class="badge badge-npc">NPC</span>
+                </div>
+            </div>
             <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:6px 0;">
                 <button class="btn btn-primary" id="confirmMyRoleBtn">✓ 确认我的角色</button>
                 <button class="btn btn-green" id="markFriendBtn">🤝 标记朋友</button>
@@ -148,6 +644,7 @@
             </div>
         </div>
 
+        <!-- 游戏 -->
         <div id="gamePanel" class="hidden">
             <div class="phase-tip" id="phaseTip"><strong>📖 你的完整故事已解锁</strong><br>盘问NPC了解人物背景，搜证寻找关键证据，最后投票。</div>
 
@@ -210,12 +707,12 @@
                 <div class="flex-row"><button class="btn btn-green reveal-btn" id="revealTruthBtn">🕯️ 揭晓真相</button></div>
             </div>
 
-            <div class="card" style="padding: 10px;">
+            <div class="card" style="padding:10px;">
                 <div class="flex-between"><span style="font-size:0.85rem;">🕸️ 关系图</span><span class="text-muted" id="relationCount">0 条连线</span></div>
                 <svg class="relationship-svg" id="relationSvg" viewBox="0 0 400 200"></svg>
             </div>
 
-            <div class="card" style="padding: 10px;">
+            <div class="card" style="padding:10px;">
                 <div class="flex-between"><span style="font-size:0.85rem;">📖 公共日志</span><button class="btn btn-sm btn-secondary" id="clearLogBtn">清空</button></div>
                 <div class="log-area" id="logArea"></div>
             </div>
@@ -230,14 +727,14 @@
     <div id="modalOverlay" class="modal-overlay hidden">
         <div class="modal-box fade-in" id="modalBox">
             <h3 id="modalTitle">📜 信息</h3>
-            <div id="modalBody" style="margin: 10px 0; line-height:1.8; color:#dacfc0; font-size:0.9rem;"></div>
+            <div id="modalBody" style="margin:10px 0; line-height:1.8; color:#dacfc0; font-size:0.9rem;"></div>
             <button class="btn btn-primary" id="modalCloseBtn">关闭</button>
         </div>
     </div>
 
     <script>
         // ================================================================
-        // 角色数据 · 有凶手版 — 凶手是陆青崖
+        // 角色数据
         // ================================================================
         const CHARACTERS = [{
             id: 'shen',
@@ -347,8 +844,7 @@
             scene: 1,
             stories: [
                 '💬 【白素衣】"他没有画我的影子。我偷了笔，想补上。"',
-                '💬 【薛泠音】"他说「第九十九幅是画给你的」。我等了十年。画里是另一个女人。我刺了他。但我刺下去的时候他已经死了。"',
-                '💬 【陆青崖】"笔是我送的。西域来的邪物。我后悔了。' // 陆青崖的NPC故事故意不完整
+                '💬 【薛泠音】"他说「第九十九幅是画给你的」。我等了十年。画里是另一个女人。我刺了他。但我刺下去的时候他已经死了。"'
             ]
         }, {
             scene: 2,
@@ -359,28 +855,7 @@
 
         const GLOBAL_TRUTH = {
             title: '🖌️ 真相 · 三重反转',
-            body: `【真凶 · 陆青崖】
-        陆青崖是凶手。他用匕首刺入顾清宴心脏，一刀致命。
-        然后把紫毫笔插进伤口，伪装成"笔自己杀人"。
-
-        【动机】
-        陆青崖欠西域商人三千两银子。西域商人用摄魂笔抵债，他转手送给了顾清宴。
-        但顾清宴用这笔画出《百美图》后，画价暴涨。
-        陆青崖作为画商，开始想："如果他死了，画就绝版了。那价格就是我定了。"
-        贪婪杀了他。
-
-        【第一层反转 · 顾清宴知道】
-        顾清宴临死前，在第九十九幅画上写了："青崖，你来了。"
-        他知道是谁。他没有喊。他选择了"不喊"。
-
-        【第二层反转 · 薛泠音是后到的】
-        薛泠音刺了尸体。她以为是自己杀的。她跑了。
-        她不知道真正的伤口是匕首，不是紫毫笔。
-        她替陆青崖背了十年的罪——虽然她不知道。
-
-        【第三层反转 · 紫毫笔的真相】
-        紫毫笔在顾清宴死后，自己画了一笔——把白素衣的影子还给了她。
-        这是顾清宴留给她的最后一笔。他死的时候，还在画。`
+            body: `【真凶 · 陆青崖】\n陆青崖是凶手。他用匕首刺入顾清宴心脏，一刀致命。然后把紫毫笔插进伤口，伪装成"笔自己杀人"。\n\n【动机】\n陆青崖欠西域商人三千两银子。西域商人用摄魂笔抵债，他转手送给了顾清宴。但顾清宴用这笔画出《百美图》后，画价暴涨。陆青崖作为画商，开始想："如果他死了，画就绝版了。那价格就是我定了。"贪婪杀了他。\n\n【第一层反转 · 顾清宴知道】\n顾清宴临死前，在第九十九幅画上写了："青崖，你来了。"他知道是谁。他没有喊。他选择了"不喊"。\n\n【第二层反转 · 薛泠音是后到的】\n薛泠音刺了尸体。她以为是自己杀的。她跑了。她不知道真正的伤口是匕首，不是紫毫笔。她替陆青崖背了罪。\n\n【第三层反转 · 紫毫笔的真相】\n紫毫笔在顾清宴死后，自己画了一笔——把白素衣的影子还给了她。这是顾清宴留给她的最后一笔。他死的时候，还在画。`
         };
 
         // ================================================================
@@ -406,48 +881,6 @@
         // DOM
         // ================================================================
         const $ = id => document.getElementById(id);
-        const phaseBadge = $('phaseBadge');
-        const phaseTip = $('phaseTip');
-        const stepCounter = $('stepCounter');
-        const playerNameDisplay = $('playerNameDisplay');
-        const characterGrid = $('characterGrid');
-        const confirmBtn = $('confirmMyRoleBtn');
-        const markFriendBtn = $('markFriendBtn');
-        const resetSelBtn = $('resetSelectionBtn');
-        const gamePanel = $('gamePanel');
-        const stepSelect = $('stepSelect');
-        const sceneTitle = $('sceneTitle');
-        const scenePhase = $('scenePhase');
-        const sceneDesc = $('sceneDesc');
-        const targetSelector = $('targetSelector');
-        const keywordPool = $('keywordPool');
-        const askBtn = $('askBtn');
-        const nextSceneBtn = $('nextSceneBtn');
-        const logArea = $('logArea');
-        const relationSvg = $('relationSvg');
-        const relationCount = $('relationCount');
-        const endingSection = $('endingSection');
-        const endingResetBtn = $('endingResetBtn');
-        const endingButterflyBtn = $('endingButterflyBtn');
-        const modalOverlay = $('modalOverlay');
-        const modalTitle = $('modalTitle');
-        const modalBody = $('modalBody');
-        const modalCloseBtn = $('modalCloseBtn');
-        const clearLogBtn = $('clearLogBtn');
-        const mySecretContent = $('mySecretContent');
-        const roleStatusGrid = $('roleStatusGrid');
-        const friendList = $('friendList');
-        const evidenceBtn = $('evidenceBtn');
-        const shareBtn = $('shareBtn');
-        const npcStoryBtn = $('npcStoryBtn');
-        const npcSpeechContainer = $('npcSpeechContainer');
-        const voteGrid = $('voteGrid');
-        const submitVoteBtn = $('submitVoteBtn');
-        const voteBtn = $('voteBtn');
-        const truthContent = $('truthContent');
-        const revealTruthBtn = $('revealTruthBtn');
-        const evidenceGrid = $('evidenceGrid');
-        const evidenceCount = $('evidenceCount');
 
         function getMyChar() { return CHARACTERS.find(c => c.id === state.myRoleId); }
 
@@ -467,73 +900,69 @@
         }
 
         function renderLog() {
-            logArea.innerHTML = state.log.slice(0, 40).map(e => {
+            const el = $('logArea');
+            if (!el) return;
+            el.innerHTML = state.log.slice(0, 40).map(e => {
                 const cls = e.isNpc ? 'npc' : (e.type === 'player' ? 'player' : 'system');
                 return `<div class="log-entry ${cls}">[${e.time}] ${e.msg}</div>`;
             }).join('');
         }
 
         // ================================================================
-        // 渲染函数
+        // 选角点击逻辑（核心修复）
         // ================================================================
-        function renderCharSelection() {
-            const all = [...CHARACTERS];
-            characterGrid.innerHTML = all.map(ch => {
-                const isMy = isMyChar(ch.id);
-                const isFr = isFriend(ch.id);
-                const sel = isMy ? 'selected' : '';
-                const layers = getUnlockedLayers(ch.id);
-                let statusLabel = '';
-                if (isMy) statusLabel = '⭐ 我的';
-                else if (isFr) statusLabel = '🤝 朋友';
-                else if (layers.length > 0) statusLabel = `L${layers.join('')}`;
-                else statusLabel = 'NPC';
-                let badge = '';
-                if (isMy) badge = '<span class="badge badge-me">我的</span>';
-                else if (isFr) badge = '<span class="badge badge-friend">朋友</span>';
-                else if (layers.length > 0) badge = '<span class="badge badge-unlocked">已解锁</span>';
-                else badge = '<span class="badge badge-npc">NPC</span>';
-                const killerTag = ch.isMurderer ? ' ⚠️' : '';
-                return `<div class="char-card ${sel}" data-id="${ch.id}">
-                        <span class="avatar">${ch.emoji}</span>
-                        <span class="name">${ch.name}${killerTag}</span>
-                        <span class="sub">${ch.title} · ${statusLabel}</span>
-                        ${badge}
-                    </div>`;
-            }).join('');
-            document.querySelectorAll('#characterGrid .char-card[data-id]').forEach(el => {
+        function initCharSelection() {
+            const grid = $('characterGrid');
+            if (!grid) return;
+            grid.querySelectorAll('.char-card').forEach(el => {
                 el.addEventListener('click', function() {
                     const id = this.dataset.id;
-                    if (state.myRoleId === id) state.myRoleId = null;
-                    else state.myRoleId = id;
-                    renderCharSelection();
+                    // 切换选中状态
+                    if (state.myRoleId === id) {
+                        state.myRoleId = null;
+                    } else {
+                        state.myRoleId = id;
+                    }
+                    // 更新UI
+                    grid.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
+                    if (state.myRoleId) {
+                        const selected = grid.querySelector(`.char-card[data-id="${state.myRoleId}"]`);
+                        if (selected) selected.classList.add('selected');
+                    }
                     const my = getMyChar();
-                    confirmBtn.textContent = my ? `✓ 我的角色: ${my.name}` : '✓ 确认我的角色';
+                    const btn = $('confirmMyRoleBtn');
+                    if (btn) btn.textContent = my ? `✓ 我的角色: ${my.name}` : '✓ 确认我的角色';
                 });
             });
         }
 
+        // ================================================================
+        // 其他渲染函数
+        // ================================================================
         function renderKeywords() {
-            keywordPool.innerHTML = KEYWORDS.map(kw => {
+            const pool = $('keywordPool');
+            if (!pool) return;
+            pool.innerHTML = KEYWORDS.map(kw => {
                 const used = state.keywordsUsed.includes(kw);
                 return `<span class="keyword-tag ${used?'used':''}" data-keyword="${kw}">${kw}</span>`;
             }).join('');
-            document.querySelectorAll('#keywordPool .keyword-tag:not(.used)').forEach(el => {
+            pool.querySelectorAll('.keyword-tag:not(.used)').forEach(el => {
                 el.addEventListener('click', function() { this.classList.toggle('active'); });
             });
         }
 
         function renderTargets() {
+            const sel = $('targetSelector');
+            if (!sel) return;
             const targets = getNPCList();
-            targetSelector.innerHTML = targets.map(ch => {
+            sel.innerHTML = targets.map(ch => {
                 const layers = getUnlockedLayers(ch.id);
                 return `<button class="btn btn-sm btn-secondary target-btn" data-id="${ch.id}">${ch.emoji} ${ch.name} L${layers.length}/3</button>`;
             }).join('');
             if (targets.length === 0) {
-                targetSelector.innerHTML =
-                    `<div style="color:#5a5a5a;font-size:0.8rem;padding:4px;">所有角色都是朋友，无需盘问</div>`;
+                sel.innerHTML = `<div style="color:#5a5a5a;font-size:0.8rem;padding:4px;">所有角色都是朋友，无需盘问</div>`;
             }
-            const btns = targetSelector.querySelectorAll('.target-btn');
+            const btns = sel.querySelectorAll('.target-btn');
             if (btns.length) btns[0]?.classList.add('btn-gold');
             btns.forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -544,8 +973,10 @@
         }
 
         function renderEvidence() {
+            const grid = $('evidenceGrid');
+            if (!grid) return;
             const unlocked = state.unlockedEvidences;
-            evidenceGrid.innerHTML = EVIDENCES.map(ev => {
+            grid.innerHTML = EVIDENCES.map(ev => {
                 const isUnlocked = unlocked.includes(ev.id);
                 return `<div class="evidence-item ${isUnlocked ? 'unlocked' : 'locked'}" data-id="${ev.id}">
                         <span class="ev-icon">${ev.icon}</span>
@@ -554,9 +985,10 @@
                         <div class="ev-content">${isUnlocked ? ev.content : '🔒 点击解锁此证据'}</div>
                     </div>`;
             }).join('');
-            evidenceCount.textContent = `${unlocked.length} / ${EVIDENCES.length}`;
+            const count = $('evidenceCount');
+            if (count) count.textContent = `${unlocked.length} / ${EVIDENCES.length}`;
 
-            document.querySelectorAll('.evidence-item.locked').forEach(el => {
+            grid.querySelectorAll('.evidence-item.locked').forEach(el => {
                 el.addEventListener('click', function() {
                     const id = this.dataset.id;
                     if (!state.unlockedEvidences.includes(id)) {
@@ -573,8 +1005,10 @@
         }
 
         function renderVote() {
+            const grid = $('voteGrid');
+            if (!grid) return;
             const allChars = [...CHARACTERS];
-            voteGrid.innerHTML = allChars.map(ch => {
+            grid.innerHTML = allChars.map(ch => {
                 const isMe = isMyChar(ch.id);
                 const isFr = isFriend(ch.id);
                 const label = isMe ? '⭐ 我' : (isFr ? '🤝 朋友' : 'NPC');
@@ -586,7 +1020,7 @@
                         <span class="v-title">${label}</span>
                     </div>`;
             }).join('');
-            voteGrid.querySelectorAll('.vote-card').forEach(el => {
+            grid.querySelectorAll('.vote-card').forEach(el => {
                 el.addEventListener('click', function() {
                     const id = this.dataset.id;
                     if (state.voteTarget === id) state.voteTarget = null;
@@ -597,13 +1031,15 @@
         }
 
         function renderFriendList() {
+            const list = $('friendList');
+            if (!list) return;
             if (state.friendIds.length === 0) {
-                friendList.innerHTML =
+                list.innerHTML =
                     `<div style="grid-column:1/-1;text-align:center;color:#5a5a5a;font-size:0.85rem;padding:12px;">还没有标记朋友，点击「标记朋友」添加</div>`;
                 return;
             }
             const friends = state.friendIds.map(id => CHARACTERS.find(c => c.id === id)).filter(Boolean);
-            friendList.innerHTML = friends.map(ch => `
+            list.innerHTML = friends.map(ch => `
                     <div class="char-card" style="cursor:default;border-color:#3a5a3a;">
                         <span class="avatar">${ch.emoji}</span>
                         <span class="name">${ch.name}</span>
@@ -613,10 +1049,12 @@
         }
 
         function renderRoleStatus() {
+            const grid = $('roleStatusGrid');
+            if (!grid) return;
             const my = getMyChar();
-            if (!my) { roleStatusGrid.innerHTML = ''; return; }
+            if (!my) { grid.innerHTML = ''; return; }
             const all = CHARACTERS;
-            roleStatusGrid.innerHTML = all.map(ch => {
+            grid.innerHTML = all.map(ch => {
                 const isMy = isMyChar(ch.id);
                 const isFr = isFriend(ch.id);
                 const layers = getUnlockedLayers(ch.id);
@@ -641,12 +1079,14 @@
         }
 
         function renderMySecret() {
+            const content = $('mySecretContent');
+            if (!content) return;
             const my = getMyChar();
-            if (!my) { mySecretContent.textContent = '请先选择角色'; return; }
+            if (!my) { content.textContent = '请先选择角色'; return; }
             const fullStory = `${my.layer1}\n\n${'═'.repeat(30)}\n\n${my.layer2}\n\n${'═'.repeat(30)}\n\n${my.layer3}`;
             const displayHtml = fullStory.replace(/\n/g, '<br>');
             const killerTag = my.isMurderer ? ' ⚠️ 你是凶手' : '';
-            mySecretContent.innerHTML = `
+            content.innerHTML = `
                     <div style="margin-bottom:4px;font-size:0.7rem;color:#b6967e;">
                         ${my.emoji} ${my.name} · ${my.title}${killerTag}
                         <span style="color:#5aaa5a;margin-left:8px;">✅ 完整故事已解锁</span>
@@ -660,58 +1100,15 @@
                 `;
             const npcList = getNPCList();
             const unlockedNpc = npcList.filter(c => getUnlockedLayers(c.id).length > 0).length;
-            stepCounter.textContent = `证据 ${state.unlockedEvidences.length} / ${EVIDENCES.length}`;
-            playerNameDisplay.textContent = `👤 ${my.name} ✅`;
-        }
-
-        function getSelectedKeyword() {
-            const active = keywordPool.querySelectorAll('.keyword-tag.active:not(.used)');
-            return active.length > 0 ? active[0].dataset.keyword : null;
-        }
-
-        function getSelectedTarget() {
-            const active = targetSelector.querySelector('.btn-gold');
-            return active ? active.dataset.id : null;
-        }
-
-        function tryUnlockNPC(keyword, targetId) {
-            if (!keyword || state.keywordsUsed.includes(keyword)) return null;
-            if (isMyChar(targetId)) return { type: 'my', msg: '这是你自己的角色，已全部解锁' };
-            if (isFriend(targetId)) return { type: 'friend', msg: '这是朋友角色，故事由朋友口述' };
-            const mapping = KEYWORD_MAP[keyword];
-            if (!mapping) return null;
-            if (mapping.targetId === targetId) {
-                const char = CHARACTERS.find(c => c.id === targetId);
-                if (!char) return null;
-                const currentLayers = getUnlockedLayers(targetId);
-                const nextLayer = mapping.layer || 2;
-                if (currentLayers.includes(nextLayer)) return { type: 'already', msg: `「${char.name}」的第${nextLayer}层已解锁` };
-                if (nextLayer === 3 && !currentLayers.includes(2)) return { type: 'prereq',
-                    msg: `需要先解锁「${char.name}」的第2层` };
-                if (!state.unlockedLayers[targetId]) state.unlockedLayers[targetId] = [];
-                state.unlockedLayers[targetId].push(nextLayer);
-                state.keywordsUsed.push(keyword);
-                let layerText = '';
-                if (nextLayer === 2) layerText = char.layer2;
-                else if (nextLayer === 3) layerText = char.layer3;
-                return { type: 'layer', charId: targetId, layer: nextLayer, text: layerText };
-            }
-            if (mapping.targetId) {
-                const expectedChar = CHARACTERS.find(c => c.id === mapping.targetId);
-                return { type: 'wrong', msg: `「${keyword}」是 ${expectedChar?.name} 的关键词` };
-            }
-            return null;
-        }
-
-        function addRelation(charId) {
-            if (!state.relations.some(r => r.a === charId && r.b === 'gu')) {
-                state.relations.push({ a: charId, b: 'gu', label: charId });
-                renderRelation();
-            }
+            const stepCounter = $('stepCounter');
+            if (stepCounter) stepCounter.textContent = `证据 ${state.unlockedEvidences.length} / ${EVIDENCES.length}`;
+            const nameDisplay = $('playerNameDisplay');
+            if (nameDisplay) nameDisplay.textContent = `👤 ${my.name} ✅`;
         }
 
         function renderRelation() {
-            const svg = relationSvg;
+            const svg = $('relationSvg');
+            if (!svg) return;
             const w = 400,
                 h = 200;
             const pos = {
@@ -776,10 +1173,66 @@
                 }
             });
             svg.innerHTML = html;
-            relationCount.textContent = state.relations.length + ' 条连线';
+            const count = $('relationCount');
+            if (count) count.textContent = state.relations.length + ' 条连线';
+        }
+
+        function addRelation(charId) {
+            if (!state.relations.some(r => r.a === charId && r.b === 'gu')) {
+                state.relations.push({ a: charId, b: 'gu', label: charId });
+                renderRelation();
+            }
+        }
+
+        // ================================================================
+        // 核心功能
+        // ================================================================
+        function getSelectedKeyword() {
+            const pool = $('keywordPool');
+            if (!pool) return null;
+            const active = pool.querySelectorAll('.keyword-tag.active:not(.used)');
+            return active.length > 0 ? active[0].dataset.keyword : null;
+        }
+
+        function getSelectedTarget() {
+            const sel = $('targetSelector');
+            if (!sel) return null;
+            const active = sel.querySelector('.btn-gold');
+            return active ? active.dataset.id : null;
+        }
+
+        function tryUnlockNPC(keyword, targetId) {
+            if (!keyword || state.keywordsUsed.includes(keyword)) return null;
+            if (isMyChar(targetId)) return { type: 'my', msg: '这是你自己的角色，已全部解锁' };
+            if (isFriend(targetId)) return { type: 'friend', msg: '这是朋友角色，故事由朋友口述' };
+            const mapping = KEYWORD_MAP[keyword];
+            if (!mapping) return null;
+            if (mapping.targetId === targetId) {
+                const char = CHARACTERS.find(c => c.id === targetId);
+                if (!char) return null;
+                const currentLayers = getUnlockedLayers(targetId);
+                const nextLayer = mapping.layer || 2;
+                if (currentLayers.includes(nextLayer)) return { type: 'already', msg: `「${char.name}」的第${nextLayer}层已解锁` };
+                if (nextLayer === 3 && !currentLayers.includes(2)) return { type: 'prereq',
+                    msg: `需要先解锁「${char.name}」的第2层` };
+                if (!state.unlockedLayers[targetId]) state.unlockedLayers[targetId] = [];
+                state.unlockedLayers[targetId].push(nextLayer);
+                state.keywordsUsed.push(keyword);
+                let layerText = '';
+                if (nextLayer === 2) layerText = char.layer2;
+                else if (nextLayer === 3) layerText = char.layer3;
+                return { type: 'layer', charId: targetId, layer: nextLayer, text: layerText };
+            }
+            if (mapping.targetId) {
+                const expectedChar = CHARACTERS.find(c => c.id === mapping.targetId);
+                return { type: 'wrong', msg: `「${keyword}」是 ${expectedChar?.name} 的关键词` };
+            }
+            return null;
         }
 
         function triggerNpcStory() {
+            const container = $('npcSpeechContainer');
+            if (!container) return;
             const sceneStories = NPC_STORIES.find(s => s.scene === state.sceneIndex);
             if (!sceneStories) {
                 addLog('💬 暂无新的NPC故事', 'system');
@@ -796,7 +1249,7 @@
             state.npcStoryIndex = idx + 1;
             const speaker = story.split('】')[0].replace('💬 【', '') + '】';
             const content = story.split('】')[1] || story;
-            npcSpeechContainer.innerHTML = `
+            container.innerHTML = `
                     <div class="npc-speech fade-in">
                         <div class="speaker">${speaker}</div>
                         <div>${content}</div>
@@ -805,7 +1258,7 @@
                 `;
             addLog(story, 'system', true);
             setTimeout(() => {
-                const el = npcSpeechContainer.querySelector('.npc-speech');
+                const el = container.querySelector('.npc-speech');
                 if (el) el.style.opacity = '0.6';
             }, 8000);
         }
@@ -821,11 +1274,14 @@
                     <p style="color:#f0d5c0;">你投给了 <strong>${char.emoji} ${char.name}</strong></p>
                     <p style="color:#b6967e;font-size:0.85rem;margin-top:8px;">投票已记录。现在点击「揭晓真相」查看完整真相。</p>
                 `);
-            submitVoteBtn.textContent = '✅ 已投票';
-            submitVoteBtn.disabled = true;
-            phaseBadge.textContent = '🗳️ 已投票';
-            phaseBadge.classList.add('vote');
-            document.getElementById('truthSection').classList.remove('hidden');
+            const btn = $('submitVoteBtn');
+            if (btn) { btn.textContent = '✅ 已投票';
+                btn.disabled = true; }
+            const badge = $('phaseBadge');
+            if (badge) { badge.textContent = '🗳️ 已投票';
+                badge.classList.add('vote'); }
+            const sec = $('truthSection');
+            if (sec) sec.classList.remove('hidden');
         }
 
         function revealTruth() {
@@ -836,7 +1292,9 @@
             if (state.truthRevealed) return;
             state.truthRevealed = true;
             const truthHtml = GLOBAL_TRUTH.body.replace(/\n/g, '<br>');
-            truthContent.innerHTML = `
+            const content = $('truthContent');
+            if (content) {
+                content.innerHTML = `
                     <div class="truth-section">
                         <div class="truth-title">${GLOBAL_TRUTH.title}</div>
                         <div class="truth-body">${truthHtml}</div>
@@ -848,17 +1306,20 @@
                         </div>
                     </div>
                 `;
-            revealTruthBtn.textContent = '✅ 已揭晓';
-            revealTruthBtn.disabled = true;
-            phaseBadge.textContent = '🕯️ 真相已揭晓';
-            phaseBadge.className = 'phase-badge truth';
+            }
+            const btn = $('revealTruthBtn');
+            if (btn) { btn.textContent = '✅ 已揭晓';
+                btn.disabled = true; }
+            const badge = $('phaseBadge');
+            if (badge) { badge.textContent = '🕯️ 真相已揭晓';
+                badge.className = 'phase-badge truth'; }
             addLog('🕯️ 真相已揭晓！真凶是陆青崖！', 'player');
-            document.getElementById('truthSection').scrollIntoView({ behavior: 'smooth' });
+            const sec = $('truthSection');
+            if (sec) sec.scrollIntoView({ behavior: 'smooth' });
         }
 
         function showEvidence() {
-            let html =
-                `<div style="margin-bottom:10px;color:#b6967e;font-size:0.8rem;">📌 公共证据 · 所有人可见</div>`;
+            let html = `<div style="margin-bottom:10px;color:#b6967e;font-size:0.8rem;">📌 公共证据 · 所有人可见</div>`;
             EVIDENCES.forEach(ev => {
                 const isUnlocked = state.unlockedEvidences.includes(ev.id);
                 html += `
@@ -869,7 +1330,7 @@
                     `;
             });
             html += `<div style="margin-top:10px;padding:10px;background:#0d080a;border-radius:12px;color:#b6967e;font-size:0.8rem;">
-                    💡 点击搜证区的证据卡片解锁，共 ${EVIDENCES.length} 条证据。注意：凶手会隐藏在故事中。
+                    💡 点击搜证区的证据卡片解锁，共 ${EVIDENCES.length} 条证据。
                 </div>`;
             showModal('📜 搜证', html);
         }
@@ -919,13 +1380,15 @@
             const result = tryUnlockNPC(keyword, target);
             if (!result) {
                 addLog(`❓ 盘问 [${keyword}] 无匹配`, 'system');
-                document.querySelector(`.keyword-tag[data-keyword="${keyword}"]`)?.classList.remove('active');
+                const tag = document.querySelector(`.keyword-tag[data-keyword="${keyword}"]`);
+                if (tag) tag.classList.remove('active');
                 return;
             }
             if (result.type === 'my' || result.type === 'friend' || result.type === 'wrong' || result.type === 'already' ||
                 result.type === 'prereq') {
                 addLog(`⚠️ ${result.msg}`, 'system');
-                document.querySelector(`.keyword-tag[data-keyword="${keyword}"]`)?.classList.remove('active');
+                const tag = document.querySelector(`.keyword-tag[data-keyword="${keyword}"]`);
+                if (tag) tag.classList.remove('active');
                 return;
             }
             if (result.type === 'layer') {
@@ -946,7 +1409,7 @@
             }
             renderKeywords();
             renderTargets();
-            renderCharSelection();
+            // 不重新渲染选角，保持选中状态
             renderFriendList();
             renderRoleStatus();
             renderMySecret();
@@ -984,7 +1447,6 @@
                         if (idx > -1) state.friendIds.splice(idx, 1);
                         else state.friendIds.push(id);
                         markFriend();
-                        renderCharSelection();
                         renderFriendList();
                         renderRoleStatus();
                         renderMySecret();
@@ -992,67 +1454,103 @@
                         renderTargets();
                         renderKeywords();
                         renderVote();
+                        // 更新选角卡片上的标签
+                        updateCharBadges();
                         addLog(`🤝 朋友列表已更新`, 'system');
                     });
                 });
             }, 100);
         }
 
+        function updateCharBadges() {
+            const grid = $('characterGrid');
+            if (!grid) return;
+            grid.querySelectorAll('.char-card').forEach(el => {
+                const id = el.dataset.id;
+                const isMy = isMyChar(id);
+                const isFr = isFriend(id);
+                const layers = getUnlockedLayers(id);
+                let badge = '';
+                let statusLabel = '';
+                if (isMy) { badge = '<span class="badge badge-me">我的</span>';
+                    statusLabel = '⭐ 我的'; } else if (isFr) { badge = '<span class="badge badge-friend">朋友</span>';
+                    statusLabel = '🤝 朋友'; } else if (layers.length > 0) { badge = '<span class="badge badge-unlocked">已解锁</span>';
+                    statusLabel = `L${layers.join('')}`; } else { badge = '<span class="badge badge-npc">NPC</span>';
+                    statusLabel = 'NPC'; }
+                const existingBadge = el.querySelector('.badge');
+                if (existingBadge) existingBadge.outerHTML = badge;
+                const sub = el.querySelector('.sub');
+                if (sub) {
+                    const titlePart = sub.textContent.split('·')[0]?.trim() || '';
+                    sub.textContent = `${titlePart} · ${statusLabel}`;
+                }
+            });
+        }
+
         function updateUI() {
             const scene = SCENES[state.sceneIndex] || SCENES[0];
-            sceneTitle.textContent = scene.title;
-            sceneDesc.textContent = scene.desc;
-            scenePhase.textContent = `第${state.sceneIndex+1}幕`;
-            if (state.truthRevealed) {
-                phaseBadge.textContent = '🕯️ 真相已揭晓';
-                phaseBadge.className = 'phase-badge truth';
-            } else if (state.hasVoted) {
-                phaseBadge.textContent = '🗳️ 已投票';
-                phaseBadge.className = 'phase-badge vote';
-            } else if (state.sceneIndex >= 2) {
-                phaseBadge.textContent = '🗳️ 投票阶段';
-                phaseBadge.className = 'phase-badge vote';
-            } else {
-                phaseBadge.textContent = '📌 搜证阶段';
-                phaseBadge.className = 'phase-badge';
+            const title = $('sceneTitle');
+            const desc = $('sceneDesc');
+            const phase = $('scenePhase');
+            if (title) title.textContent = scene.title;
+            if (desc) desc.textContent = scene.desc;
+            if (phase) phase.textContent = `第${state.sceneIndex+1}幕`;
+
+            const badge = $('phaseBadge');
+            if (badge) {
+                if (state.truthRevealed) { badge.textContent = '🕯️ 真相已揭晓';
+                    badge.className = 'phase-badge truth'; } else if (state.hasVoted) { badge.textContent = '🗳️ 已投票';
+                    badge.className = 'phase-badge vote'; } else if (state.sceneIndex >= 2) { badge.textContent = '🗳️ 投票阶段';
+                    badge.className = 'phase-badge vote'; } else { badge.textContent = '📌 搜证阶段';
+                    badge.className = 'phase-badge'; }
             }
-            if (state.sceneIndex >= 2) {
-                document.getElementById('voteSection').classList.remove('hidden');
-            } else {
-                document.getElementById('voteSection').classList.add('hidden');
+
+            const voteSec = $('voteSection');
+            if (voteSec) {
+                if (state.sceneIndex >= 2) voteSec.classList.remove('hidden');
+                else voteSec.classList.add('hidden');
             }
-            if (state.truthRevealed || state.hasVoted) {
-                document.getElementById('truthSection').classList.remove('hidden');
-            } else {
-                document.getElementById('truthSection').classList.add('hidden');
+            const truthSec = $('truthSection');
+            if (truthSec) {
+                if (state.truthRevealed || state.hasVoted) truthSec.classList.remove('hidden');
+                else truthSec.classList.add('hidden');
             }
-            if (state.sceneIndex >= 2) endingSection.classList.remove('hidden');
-            else endingSection.classList.add('hidden');
-            nextSceneBtn.textContent = state.sceneIndex >= 2 ? '🔄 重演真相' : '▶ 推进剧情';
+            const endSec = $('endingSection');
+            if (endSec) {
+                if (state.sceneIndex >= 2) endSec.classList.remove('hidden');
+                else endSec.classList.add('hidden');
+            }
+            const nextBtn = $('nextSceneBtn');
+            if (nextBtn) nextBtn.textContent = state.sceneIndex >= 2 ? '🔄 重演真相' : '▶ 推进剧情';
+
             const my = getMyChar();
             const npcList = getNPCList();
             const unlockedNpc = npcList.filter(c => getUnlockedLayers(c.id).length > 0).length;
-            if (!my) {
-                phaseTip.innerHTML =
-                `<strong>📖 请先选择你的角色</strong><br>点击角色头像选择，然后点击「确认我的角色」开始游戏。`;
-            } else if (state.truthRevealed) {
-                phaseTip.innerHTML = `<strong>🕯️ 真相已揭晓</strong><br>查看完整真相，然后选择结局。`;
-            } else if (state.hasVoted) {
-                phaseTip.innerHTML =
-                    `<strong>🗳️ 你已投票</strong><br>点击「揭晓真相」查看完整故事和凶手真相。`;
-            } else if (state.sceneIndex >= 2) {
-                phaseTip.innerHTML =
-                    `<strong>🗳️ 投票阶段</strong><br>根据盘问故事和搜证证据，投票选出你认为的凶手。`;
-            } else {
-                phaseTip.innerHTML =
-                    `<strong>✅ 你的完整故事已解锁</strong><br>盘问NPC了解人物故事（${unlockedNpc}/${npcList.length}），搜证寻找关键证据（${state.unlockedEvidences.length}/${EVIDENCES.length}）。`;
+            const tip = $('phaseTip');
+            if (tip) {
+                if (!my) {
+                    tip.innerHTML =
+                    `<strong>📖 请先选择你的角色</strong><br>点击角色头像选择，然后点击「确认我的角色」开始游戏。`;
+                } else if (state.truthRevealed) {
+                    tip.innerHTML = `<strong>🕯️ 真相已揭晓</strong><br>查看完整真相，然后选择结局。`;
+                } else if (state.hasVoted) {
+                    tip.innerHTML = `<strong>🗳️ 你已投票</strong><br>点击「揭晓真相」查看完整故事和凶手真相。`;
+                } else if (state.sceneIndex >= 2) {
+                    tip.innerHTML = `<strong>🗳️ 投票阶段</strong><br>根据盘问故事和搜证证据，投票选出你认为的凶手。`;
+                } else {
+                    tip.innerHTML =
+                        `<strong>✅ 你的完整故事已解锁</strong><br>盘问NPC了解人物故事（${unlockedNpc}/${npcList.length}），搜证寻找关键证据（${state.unlockedEvidences.length}/${EVIDENCES.length}）。`;
+                }
             }
         }
 
         function showModal(title, body) {
-            modalTitle.textContent = title;
-            modalBody.innerHTML = body;
-            modalOverlay.classList.remove('hidden');
+            const t = $('modalTitle');
+            const b = $('modalBody');
+            if (t) t.textContent = title;
+            if (b) b.innerHTML = body;
+            const overlay = $('modalOverlay');
+            if (overlay) overlay.classList.remove('hidden');
         }
 
         function nextScene() {
@@ -1072,7 +1570,8 @@
                 setTimeout(() => triggerNpcStory(), 300);
                 if (state.sceneIndex === 2) {
                     addLog('🗳️ 进入投票阶段！选出你心中的凶手。', 'system');
-                    document.getElementById('voteSection').classList.remove('hidden');
+                    const sec = $('voteSection');
+                    if (sec) sec.classList.remove('hidden');
                 }
                 updateUI();
                 renderRelation();
@@ -1111,8 +1610,10 @@
                     <p>江雪吟站在画楼门口，第一次觉得——自己像个人了。</p>
                     <p style="color:#b6967e;margin-top:12px;">「原来姹紫嫣红开遍，似这般都付与断井颓垣。」</p>
                 `);
-            endingResetBtn.disabled = true;
-            endingButterflyBtn.disabled = true;
+            const resetBtn = $('endingResetBtn');
+            const butterflyBtn = $('endingButterflyBtn');
+            if (resetBtn) resetBtn.disabled = true;
+            if (butterflyBtn) butterflyBtn.disabled = true;
         }
 
         function confirmMyRole() {
@@ -1123,8 +1624,10 @@
                     state.unlockedLayers[state.myRoleId].push(layer);
                 }
             });
-            stepSelect.classList.add('hidden');
-            gamePanel.classList.remove('hidden');
+            const select = $('stepSelect');
+            const panel = $('gamePanel');
+            if (select) select.classList.add('hidden');
+            if (panel) panel.classList.remove('hidden');
             renderMySecret();
             renderFriendList();
             renderRoleStatus();
@@ -1134,6 +1637,7 @@
             renderVote();
             renderEvidence();
             updateUI();
+            updateCharBadges();
             const my = getMyChar();
             addLog(`🖌️ 你已扮演 ${my.name}，完整故事已解锁`, 'player');
             if (my.isMurderer) {
@@ -1157,71 +1661,135 @@
             state.voteTarget = null;
             state.hasVoted = false;
             state.truthRevealed = false;
-            gamePanel.classList.add('hidden');
-            stepSelect.classList.remove('hidden');
-            renderCharSelection();
-            confirmBtn.textContent = '✓ 确认我的角色';
-            endingResetBtn.disabled = false;
-            endingButterflyBtn.disabled = false;
-            endingSection.classList.add('hidden');
-            document.getElementById('voteSection').classList.add('hidden');
-            document.getElementById('truthSection').classList.add('hidden');
-            logArea.innerHTML = '';
-            npcSpeechContainer.innerHTML = '';
-            truthContent.innerHTML = '投票后点击「揭晓真相」查看完整故事和凶手真相。';
-            revealTruthBtn.textContent = '🕯️ 揭晓真相';
-            revealTruthBtn.disabled = false;
-            submitVoteBtn.textContent = '✅ 确认投票';
-            submitVoteBtn.disabled = false;
+            const panel = $('gamePanel');
+            const select = $('stepSelect');
+            if (panel) panel.classList.add('hidden');
+            if (select) select.classList.remove('hidden');
+            // 重置选角高亮
+            const grid = $('characterGrid');
+            if (grid) grid.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
+            const btn = $('confirmMyRoleBtn');
+            if (btn) btn.textContent = '✓ 确认我的角色';
+            const resetBtn = $('endingResetBtn');
+            const butterflyBtn = $('endingButterflyBtn');
+            if (resetBtn) resetBtn.disabled = false;
+            if (butterflyBtn) butterflyBtn.disabled = false;
+            const endSec = $('endingSection');
+            if (endSec) endSec.classList.add('hidden');
+            const voteSec = $('voteSection');
+            if (voteSec) voteSec.classList.add('hidden');
+            const truthSec = $('truthSection');
+            if (truthSec) truthSec.classList.add('hidden');
+            const log = $('logArea');
+            if (log) log.innerHTML = '';
+            const speech = $('npcSpeechContainer');
+            if (speech) speech.innerHTML = '';
+            const truthContent = $('truthContent');
+            if (truthContent) truthContent.innerHTML = '投票后点击「揭晓真相」查看完整故事和凶手真相。';
+            const revealBtn = $('revealTruthBtn');
+            if (revealBtn) { revealBtn.textContent = '🕯️ 揭晓真相';
+                revealBtn.disabled = false; }
+            const submitBtn = $('submitVoteBtn');
+            if (submitBtn) { submitBtn.textContent = '✅ 确认投票';
+                submitBtn.disabled = false; }
             renderEvidence();
             renderRelation();
             updateUI();
-            playerNameDisplay.textContent = '👤 未选角色';
+            updateCharBadges();
+            const nameDisplay = $('playerNameDisplay');
+            if (nameDisplay) nameDisplay.textContent = '👤 未选角色';
             addLog('🔄 游戏已重置', 'system');
         }
 
+        // ================================================================
+        // 启动游戏
+        // ================================================================
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
-                renderCharSelection();
+                // 初始化选角点击
+                initCharSelection();
                 renderKeywords();
                 renderTargets();
                 renderRelation();
                 renderVote();
                 renderEvidence();
                 updateUI();
+                updateCharBadges();
+
                 addLog('🖌️ 欢迎来到《画中仙·未寄的红豆笺》有凶手版', 'system');
                 addLog('🔍 搜证区有 14 条证据等待解锁', 'system');
-                addLog('🔴 凶手是玩家之一，仔细推理！', 'system');
+                addLog('🔴 凶手是陆青崖，但游戏中需要玩家推理！', 'system');
 
-                confirmBtn.addEventListener('click', confirmMyRole);
-                markFriendBtn.addEventListener('click', markFriend);
-                resetSelBtn.addEventListener('click', function() {
+                const confirmBtn = $('confirmMyRoleBtn');
+                if (confirmBtn) confirmBtn.addEventListener('click', confirmMyRole);
+
+                const markBtn = $('markFriendBtn');
+                if (markBtn) markBtn.addEventListener('click', markFriend);
+
+                const resetBtn = $('resetSelectionBtn');
+                if (resetBtn) resetBtn.addEventListener('click', function() {
                     state.myRoleId = null;
-                    renderCharSelection();
-                    confirmBtn.textContent = '✓ 确认我的角色';
+                    const grid = $('characterGrid');
+                    if (grid) grid.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
+                    const btn = $('confirmMyRoleBtn');
+                    if (btn) btn.textContent = '✓ 确认我的角色';
+                    updateCharBadges();
                 });
-                askBtn.addEventListener('click', handleAsk);
-                nextSceneBtn.addEventListener('click', nextScene);
-                clearLogBtn.addEventListener('click', function() { state.log = [];
+
+                const askBtn = $('askBtn');
+                if (askBtn) askBtn.addEventListener('click', handleAsk);
+
+                const nextBtn = $('nextSceneBtn');
+                if (nextBtn) nextBtn.addEventListener('click', nextScene);
+
+                const clearBtn = $('clearLogBtn');
+                if (clearBtn) clearBtn.addEventListener('click', function() { state.log = [];
                     renderLog(); });
-                evidenceBtn.addEventListener('click', showEvidence);
-                shareBtn.addEventListener('click', showShareGuide);
-                npcStoryBtn.addEventListener('click', triggerNpcStory);
-                voteBtn.addEventListener('click', function() {
-                    document.getElementById('voteSection').scrollIntoView({ behavior: 'smooth' });
+
+                const evBtn = $('evidenceBtn');
+                if (evBtn) evBtn.addEventListener('click', showEvidence);
+
+                const shareBtn = $('shareBtn');
+                if (shareBtn) shareBtn.addEventListener('click', showShareGuide);
+
+                const npcBtn = $('npcStoryBtn');
+                if (npcBtn) npcBtn.addEventListener('click', triggerNpcStory);
+
+                const voteBtn = $('voteBtn');
+                if (voteBtn) voteBtn.addEventListener('click', function() {
+                    const sec = $('voteSection');
+                    if (sec) sec.scrollIntoView({ behavior: 'smooth' });
                 });
-                submitVoteBtn.addEventListener('click', submitVote);
-                revealTruthBtn.addEventListener('click', revealTruth);
-                endingResetBtn.addEventListener('click', function() { chooseEnding('reset'); });
-                endingButterflyBtn.addEventListener('click', function() { chooseEnding('butterfly'); });
-                modalCloseBtn.addEventListener('click', function() { modalOverlay.classList.add('hidden'); });
-                modalOverlay.addEventListener('click', function(e) {
-                    if (e.target === modalOverlay) modalOverlay.classList.add('hidden');
+
+                const submitVoteBtn = $('submitVoteBtn');
+                if (submitVoteBtn) submitVoteBtn.addEventListener('click', submitVote);
+
+                const revealBtn = $('revealTruthBtn');
+                if (revealBtn) revealBtn.addEventListener('click', revealTruth);
+
+                const endingReset = $('endingResetBtn');
+                if (endingReset) endingReset.addEventListener('click', function() { chooseEnding('reset'); });
+
+                const endingButterfly = $('endingButterflyBtn');
+                if (endingButterfly) endingButterfly.addEventListener('click', function() { chooseEnding('butterfly'); });
+
+                const modalClose = $('modalCloseBtn');
+                if (modalClose) modalClose.addEventListener('click', function() {
+                    const overlay = $('modalOverlay');
+                    if (overlay) overlay.classList.add('hidden');
                 });
+
+                const modalOverlay = $('modalOverlay');
+                if (modalOverlay) {
+                    modalOverlay.addEventListener('click', function(e) {
+                        if (e.target === modalOverlay) modalOverlay.classList.add('hidden');
+                    });
+                }
+
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'r' && e.ctrlKey) { e.preventDefault(); if (confirm('重置游戏？')) resetGame(); }
                 });
-            }, 50);
+            }, 100);
         });
     </script>
 </body>
